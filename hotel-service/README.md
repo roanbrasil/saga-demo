@@ -1,0 +1,1 @@
+curl --header "Content-Type: application/json"  --request POST  --data '{"userId":"teste", "quantityOfRooms":"6", "action":"BLOCK_ROOM"}'  http://localhost:9000/hotel/publish

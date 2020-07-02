@@ -1,20 +1,16 @@
 package com.sagapattern.domain.services;
 
-import com.sagapattern.domain.model.Hotel;
-import com.sagapattern.domain.model.HotelEventRequest;
-import com.sagapattern.domain.model.HotelEventResponse;
-import com.sagapattern.domain.model.RoomStatus;
+import com.sagapattern.domain.model.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.kafka.support.KafkaHeaders;
-import org.springframework.messaging.handler.annotation.Header;
-import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
 
 @Slf4j
 @Service
@@ -22,18 +18,30 @@ public class HotelService {
 
     private static final String TOPIC = "hotelResponse";
 
+    private Map<String, RoomAction> roomSituation = Map.of(
+            "100", RoomAction.UNBLOCK_ROOM,
+            "200", RoomAction.UNBLOCK_ROOM,
+            "300", RoomAction.UNBLOCK_ROOM,
+            "400", RoomAction.UNBLOCK_ROOM,
+            "500", RoomAction.UNBLOCK_ROOM);
+
     @Autowired
     @Qualifier(value = "response")
     private KafkaTemplate<String, HotelEventResponse> kafkaTemplate;
+
 
     @KafkaListener(topics = "hotelRequest")
     public void consume(HotelEventRequest request) {
         log.info(String.format("#### -> Hotel Event Request Consumed -> %s", request.toString()));
 
-        //TODO: Implementar um HASH com 5 quartos em memoria por enquanto e tirar valor fixo na response
         HotelEventResponse response = new HotelEventResponse();
-        response.setUserId("1234");
-        response.setHotel(new Hotel("580", RoomStatus.PENDING_OF_CONFIRMATION));
+
+
+        if(roomSituation.containsKey(request.getRoomNumber())){
+            response.setHotel(new Hotel(request.getRoomNumber(), RoomStatus.PENDING_OF_CONFIRMATION));
+        }else{
+            response.setHotel(new Hotel(request.getRoomNumber(), RoomStatus.UNAVAILABLE));
+        }
         sendMessage(response);
     }
 

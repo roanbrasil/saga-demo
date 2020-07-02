@@ -9,7 +9,5 @@ import lombok.*;
 @AllArgsConstructor
 public class HotelEventResponse {
 
-    private String userId;
-
     public Hotel hotel;
 }

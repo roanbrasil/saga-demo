@@ -36,11 +36,11 @@ public class HotelService {
 
         HotelEventResponse response = new HotelEventResponse();
 
-
+        response.setRoomNumber(request.getRoomNumber());
         if(roomSituation.containsKey(request.getRoomNumber())){
-            response.setHotel(new Hotel(request.getRoomNumber(), RoomStatus.PENDING_OF_CONFIRMATION));
+            response.setStatus(RoomStatus.PENDING_OF_CONFIRMATION);
         }else{
-            response.setHotel(new Hotel(request.getRoomNumber(), RoomStatus.UNAVAILABLE));
+            response.setStatus(RoomStatus.UNAVAILABLE);
         }
         sendMessage(response);
     }

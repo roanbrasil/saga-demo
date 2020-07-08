@@ -7,12 +7,9 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Logger;
 
-import com.sagademo.models.OrderRequest;
-import com.sagademo.models.OrderResponse;
+import com.sagademo.models.*;
 import com.sagademo.models.OrderResponse.OrderStatus;
-import com.sagademo.models.PaymentRequest;
 import com.sagademo.models.PaymentRequest.TransactionType;
-import com.sagademo.models.PaymentResponse;
 import com.sagademo.serdes.SerdesFactory;
 
 import org.apache.kafka.clients.admin.AdminClient;
@@ -124,6 +121,14 @@ public class KafkaOrchestrator {
         orderResponseStream.foreach((key, value) -> logger.info("Processing Order response: " + value));
         orderResponseStream.to("order_response",
                 Produced.with(Serdes.String(), SerdesFactory.getSerde(OrderResponse.class)));
+    }
+
+    private KStream<String, HotelResponse> hotelResponseStream(StreamsBuilder builder){
+       return null;
+    }
+
+    private void hotelRequestStream(KStream<String, HotelRequest> hotelRequestKStream){
+
     }
 
     private KStream<String, PaymentResponse> getPaymentResponseStream(StreamsBuilder builder) {

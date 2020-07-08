@@ -1,8 +1,6 @@
 package com.sagademo;
 
-import java.util.Collections;
-import java.util.Optional;
-import java.util.Properties;
+import java.util.*;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Logger;
@@ -56,6 +54,9 @@ public class KafkaOrchestrator {
         createTopic("payment_response", 1);
         createTopic("order_request", 1);
         createTopic("order_response", 1);
+        createTopic("hotel_request", 1);
+        createTopic("hotel_response", 1);
+
     }
 
     /**

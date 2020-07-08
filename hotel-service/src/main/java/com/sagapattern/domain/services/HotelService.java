@@ -8,7 +8,6 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.Map;
 
 
@@ -16,9 +15,9 @@ import java.util.Map;
 @Service
 public class HotelService {
 
-    private static final String TOPIC = "hotelResponse";
+    private static final String HOTEL_RESPONSE_TOPIC = "hotel_response";
 
-    private Map<String, RoomAction> roomSituation = Map.of(
+    private final Map<String, RoomAction> roomSituation = Map.of(
             "100", RoomAction.UNBLOCK_ROOM,
             "200", RoomAction.UNBLOCK_ROOM,
             "300", RoomAction.UNBLOCK_ROOM,
@@ -30,7 +29,7 @@ public class HotelService {
     private KafkaTemplate<String, HotelEventResponse> kafkaTemplate;
 
 
-    @KafkaListener(topics = "hotelRequest")
+    @KafkaListener(topics = "hotel_request")
     public void consume(HotelEventRequest request) {
         log.info(String.format("#### -> Hotel Event Request Consumed -> %s", request.toString()));
 
@@ -47,7 +46,7 @@ public class HotelService {
 
     public void sendMessage(HotelEventResponse message) {
         log.info(String.format("#### -> Hotel Event Response Producer Message -> %s", message.toString()));
-        this.kafkaTemplate.send(TOPIC, message);
+        this.kafkaTemplate.send(HOTEL_RESPONSE_TOPIC, message);
     }
 
 //    @KafkaListener(topics = "hotelResponse")
